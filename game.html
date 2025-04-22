@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clash Snake - Dragon Edition</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #1a1a2e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        #gameContainer {
+            position: relative;
+        }
+
+        #gameCanvas {
+            border: 3px solid #e6621f;
+            border-radius: 10px;
+            background-color: #2a2a4e;
+        }
+
+        #score {
+            position: absolute;
+            top: -40px;
+            right: 10px;
+            font-size: 24px;
+            color: #ffd700;
+        }
+
+        #startButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #e6621f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #startButton:hover {
+            background-color: #c4421b;
+        }
+
+        .game-title {
+            color: #e6621f;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="game-title">Clash Snake - Dragon Edition</h1>
+    <div id="gameContainer">
+        <div id="score">Score: 0</div>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+    </div>
+    <button id="startButton">Start Game</button>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const startButton = document.getElementById('startButton');
+
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+        
+        let snake = [
+            { x: 10, y: 10 }
+        ];
+        let food = { x: 5, y: 5 };
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let gameInterval;
+        let gameSpeed = 100;
+        let gameRunning = false;
+
+        // Load images
+        const dragonHead = new Image();
+        dragonHead.src = 'https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png';
+        
+        const elixir = new Image();
+        elixir.src = 'https://wiki.clash.ninja/images/6/6f/Elixir.png';
+
+        function drawGame() {
+            clearCanvas();
+            moveSnake();
+            drawFood();
+            drawSnake();
+            checkCollision();
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = '#2a2a4e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawSnake() {
+            snake.forEach((segment, index) => {
+                if (index === 0) {
+                    // Draw dragon head
+                    ctx.drawImage(dragonHead, 
+                        segment.x * gridSize, 
+                        segment.y * gridSize, 
+                        gridSize, 
+                        gridSize
+                    );
+                } else {
+                    // Draw body segments
+                    ctx.fillStyle = '#e6621f';
+                    ctx.fillRect(
+                        segment.x * gridSize + 2,
+                        segment.y * gridSize + 2,
+                        gridSize - 4,
+                        gridSize - 4
+                    );
+                }
+            });
+        }
+
+        function drawFood() {
+            ctx.drawImage(elixir, 
+                food.x * gridSize, 
+                food.y * gridSize, 
+                gridSize, 
+                gridSize
+            );
+        }
+
+        function moveSnake() {
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                scoreElement.textContent = `Score: ${score}`;
+                generateFood();
+                if (score % 50 === 0) {
+                    gameSpeed = Math.max(50, gameSpeed - 10);
+                    clearInterval(gameInterval);
+                    gameInterval = setInterval(drawGame, gameSpeed);
+                }
+            } else {
+                snake.pop();
+            }
+        }
+
+        function generateFood() {
+            food = {
+                x: Math.floor(Math.random() * tileCount),
+                y: Math.floor(Math.random() * tileCount)
+            };
+            // Prevent food from spawning on snake
+            if (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+                generateFood();
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+
+            // Wall collision
+            if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                gameOver();
+            }
+
+            // Self collision
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver();
+                }
+            }
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval);
+            gameRunning = false;
+            startButton.style.display = 'block';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#e6621f';
+            ctx.font = '40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Game Over!', canvas.width/2, canvas.height/2);
+        }
+
+        function startGame() {
+            if (gameRunning) return;
+            
+            snake = [{ x: 10, y: 10 }];
+            dx = 1;
+            dy = 0;
+            score = 0;
+            scoreElement.textContent = 'Score: 0';
+            gameSpeed = 100;
+            generateFood();
+            gameRunning = true;
+            startButton.style.display = 'none';
+            gameInterval = setInterval(drawGame, gameSpeed);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (!gameRunning) return;
+            
+            switch(event.key) {
+                case 'ArrowUp':
+                    if (dy !== 1) { dx = 0; dy = -1; }
+                    break;
+                case 'ArrowDown':
+                    if (dy !== -1) { dx = 0; dy = 1; }
+                    break;
+                case 'ArrowLeft':
+                    if (dx !== 1) { dx = -1; dy = 0; }
+                    break;
+                case 'ArrowRight':
+                    if (dx !== -1) { dx = 1; dy = 0; }
+                    break;
+            }
+        });
+
+        startButton.addEventListener('click', startGame);
+    </script>
+</body>
+</html>

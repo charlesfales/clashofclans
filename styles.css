@@ -109,3 +109,26 @@ iframe {
         height: 250px;
     }
 }
+
+.game-section {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #2a2a4e;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.game-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #e6621f;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    transition: background-color 0.3s;
+}
+
+.game-button:hover {
+    background-color: #c4421b;
+}
