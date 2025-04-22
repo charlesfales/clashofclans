@@ -162,3 +162,22 @@ img {
     margin: 20px auto;
     display: block;
 }
+
+/* Tableau Section */
+.tableau-section {
+    background-color: #2a2a4e;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.tableau-section h2 {
+    text-align: center;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.tableauPlaceholder {
+    width: 100%;
+    margin: 0 auto;
+}
