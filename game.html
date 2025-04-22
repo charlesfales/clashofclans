@@ -50,6 +50,25 @@
             background-color: #c4421b;
         }
 
+        #backButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #e6621f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        #backButton:hover {
+            background-color: #c4421b;
+        }
+
         .game-title {
             color: #e6621f;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -59,9 +78,10 @@
 </head>
 <body>
     <h1 class="game-title">Clash Snake</h1>
+    <a href="index.html" id="backButton">Back to Home</a>
     <div id="gameContainer">
         <div id="score">Score: 0</div>
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <canvas id="gameCanvas" width="800" height="800"></canvas>
     </div>
     <button id="startButton">Start Game</button>
 
@@ -71,7 +91,7 @@
         const scoreElement = document.getElementById('score');
         const startButton = document.getElementById('startButton');
 
-        const gridSize = 20;
+        const gridSize = 40;
         const tileCount = canvas.width / gridSize;
         
         let snake = [
@@ -84,6 +104,16 @@
         let gameInterval;
         let gameSpeed = 100;
         let gameRunning = false;
+
+        // Image assets
+        let snakeHeadImg = new Image();
+        let snakeBodyImg = new Image();
+        let foodImg = new Image();
+
+        // Load images
+        snakeHeadImg.src = 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9KNlFMYTFoaERqV3h3bjIySFpHSi5wbmcifQ:supercell:jwPaVrMOkZxk6wMAWOOMwBcIrgmk5Ahk_dlBl42vT4s?width=2400'; // Replace with your image URL
+        snakeBodyImg.src = 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9CVjU0cHJqTldKQ2NqZW1XUUg0Ry5wbmcifQ:supercell:-tQDKyplbmUYKqmqudgsN3v8FURk1KqarHhOjAplLfI?width=2400'; // Replace with your image URL
+        foodImg.src = 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC85WUg1Tm5NM1ljeHZpMndUaFdDdC5wbmcifQ:supercell:2jcZLqnH1VFF7_PwbU5YFhOkhaaKU2k75I9k1k8O6Q8?width=2400'; // Replace with your image URL
 
         function drawGame() {
             clearCanvas();
@@ -102,31 +132,34 @@
             snake.forEach((segment, index) => {
                 if (index === 0) {
                     // Draw head
-                    ctx.fillStyle = '#ff4d4d';
+                    ctx.drawImage(
+                        snakeHeadImg,
+                        segment.x * gridSize,
+                        segment.y * gridSize,
+                        gridSize,
+                        gridSize
+                    );
                 } else {
                     // Draw body
-                    ctx.fillStyle = '#e6621f';
+                    ctx.drawImage(
+                        snakeBodyImg,
+                        segment.x * gridSize,
+                        segment.y * gridSize,
+                        gridSize,
+                        gridSize
+                    );
                 }
-                ctx.fillRect(
-                    segment.x * gridSize + 2,
-                    segment.y * gridSize + 2,
-                    gridSize - 4,
-                    gridSize - 4
-                );
             });
         }
 
         function drawFood() {
-            ctx.fillStyle = '#9c59ff'; // Purple for elixir
-            ctx.beginPath();
-            ctx.arc(
-                food.x * gridSize + gridSize/2,
-                food.y * gridSize + gridSize/2,
-                gridSize/2 - 2,
-                0,
-                Math.PI * 2
+            ctx.drawImage(
+                foodImg,
+                food.x * gridSize,
+                food.y * gridSize,
+                gridSize,
+                gridSize
             );
-            ctx.fill();
         }
 
         function moveSnake() {
