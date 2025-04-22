@@ -1,0 +1,111 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a2e;
+    color: #ffffff;
+}
+
+/* Header Styles */
+.header {
+    background-color: #e6621f;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.header h1 {
+    font-family: 'Arial Black', sans-serif;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+nav {
+    margin: 20px 0;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 5px 15px;
+    margin: 0 10px;
+    border-radius: 5px;
+    background-color: #c4421b;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #a13616;
+}
+
+/* Main Content Styles */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #2a2a4e;
+    border-radius: 10px;
+}
+
+/* Image Styles */
+.banner-image, .strategy-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+/* List Styles */
+ol {
+    color: #ffd700;
+    font-size: 1.2em;
+}
+
+ul {
+    color: #ffffff;
+    font-size: 0.9em;
+}
+
+/* Video Section */
+.video-section {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #2a2a4e;
+    border-radius: 10px;
+}
+
+iframe {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(230, 98, 31, 0.3);
+}
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #e6621f;
+    margin-top: 40px;
+}
+
+/* Strategy Section */
+.strategy-section {
+    background-color: #2a2a4e;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    iframe {
+        width: 100%;
+        height: 250px;
+    }
+}
