@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clash Snake - Dragon Edition</title>
+    <title>Clash Snake</title>
     <style>
         body {
             display: flex;
@@ -58,7 +58,7 @@
     </style>
 </head>
 <body>
-    <h1 class="game-title">Clash Snake - Dragon Edition</h1>
+    <h1 class="game-title">Clash Snake</h1>
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <canvas id="gameCanvas" width="400" height="400"></canvas>
@@ -85,13 +85,6 @@
         let gameSpeed = 100;
         let gameRunning = false;
 
-        // Load images
-        const dragonHead = new Image();
-        dragonHead.src = 'https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png';
-        
-        const elixir = new Image();
-        elixir.src = 'https://wiki.clash.ninja/images/6/6f/Elixir.png';
-
         function drawGame() {
             clearCanvas();
             moveSnake();
@@ -108,33 +101,32 @@
         function drawSnake() {
             snake.forEach((segment, index) => {
                 if (index === 0) {
-                    // Draw dragon head
-                    ctx.drawImage(dragonHead, 
-                        segment.x * gridSize, 
-                        segment.y * gridSize, 
-                        gridSize, 
-                        gridSize
-                    );
+                    // Draw head
+                    ctx.fillStyle = '#ff4d4d';
                 } else {
-                    // Draw body segments
+                    // Draw body
                     ctx.fillStyle = '#e6621f';
-                    ctx.fillRect(
-                        segment.x * gridSize + 2,
-                        segment.y * gridSize + 2,
-                        gridSize - 4,
-                        gridSize - 4
-                    );
                 }
+                ctx.fillRect(
+                    segment.x * gridSize + 2,
+                    segment.y * gridSize + 2,
+                    gridSize - 4,
+                    gridSize - 4
+                );
             });
         }
 
         function drawFood() {
-            ctx.drawImage(elixir, 
-                food.x * gridSize, 
-                food.y * gridSize, 
-                gridSize, 
-                gridSize
+            ctx.fillStyle = '#9c59ff'; // Purple for elixir
+            ctx.beginPath();
+            ctx.arc(
+                food.x * gridSize + gridSize/2,
+                food.y * gridSize + gridSize/2,
+                gridSize/2 - 2,
+                0,
+                Math.PI * 2
             );
+            ctx.fill();
         }
 
         function moveSnake() {
@@ -160,7 +152,6 @@
                 x: Math.floor(Math.random() * tileCount),
                 y: Math.floor(Math.random() * tileCount)
             };
-            // Prevent food from spawning on snake
             if (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
                 generateFood();
             }
@@ -169,12 +160,10 @@
         function checkCollision() {
             const head = snake[0];
 
-            // Wall collision
             if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
                 gameOver();
             }
 
-            // Self collision
             for (let i = 1; i < snake.length; i++) {
                 if (head.x === snake[i].x && head.y === snake[i].y) {
                     gameOver();

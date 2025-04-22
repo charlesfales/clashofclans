@@ -132,3 +132,33 @@ iframe {
 .game-button:hover {
     background-color: #c4421b;
 }
+
+/* Image container styles */
+.image-container {
+    max-width: 100%;
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* General image styles */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Banner image specific styles */
+.banner-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* Strategy image specific styles */
+.strategy-image {
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+    display: block;
+}
